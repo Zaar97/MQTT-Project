@@ -16,11 +16,11 @@
 ## Code Setup
 
 ```bash
-#include <Adafruit_Sensor.h>
-#include <DHT.h>
-#include <DHT_U.h>
-#include <ESP8266WiFi.h>
-#include <PubSubClient.h>
+include <Adafruit_Sensor.h>
+include <DHT.h>
+include <DHT_U.h>
+include <ESP8266WiFi.h>
+include <PubSubClient.h>
 
 
 // Update these with values suitable for your network.
