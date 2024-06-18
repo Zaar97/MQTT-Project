@@ -33,6 +33,15 @@
               </div>
         </div>
 
+        <div class="row justify-content-center">
+          <div class="col-2">
+            <h1>Light:</h1>
+          </div>
+          <div class="col-1">
+              <button class="btn btn-primary" id="btnLed">On</button>
+            </div>
+      </div>
+
       </div>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -46,11 +55,13 @@
         $(document).ready(function(){
 
             /** Write Your MQTT Settings Here  Start**/
-            Server="198.148.113.137";
-            Port="9000";
+            Server="152.42.194.14";
+            Port="3000";
             Topic="/kel10/room/temperature";
+            LedTopic="/kel10/room/led";
             MQTTUserName="zara";
             MQTTPassword="atha";
+            Connected=false;
             /** Write Your MQTT Settings Here End **/
 
             // Generate a random client ID
@@ -81,13 +92,46 @@
             };
             // connect the client
             client.connect(options);
+
+
+
+            /***LED Button Code Start ***/
+            $("#btnLed").click(function(){
+              if($("#btnLed").text()=="On"){
+                console.log("On");
+                $("#btnLed").text("Off");
+                TurnOnOffLed("On");
+              }else{
+                console.log("Off");
+                $("#btnLed").text("On");
+                TurnOnOffLed("Off");
+              }
+            });
+            /***LED Button Code End ***/
         });
 
+        /***LED Button Function Start ***/
+        function TurnOnOffLed(Signal){
+          if(Connected){
+            if(Signal=="On"){
+              message = new Paho.MQTT.Message("On");
+            }else{
+              message = new Paho.MQTT.Message("Off");
+            }
+            message.destinationName = LedTopic;
+            client.send(message);
+          }
+        
+        }
+        /***LED Button Function End ***/
+
+        
         // called when the client connects
         function onConnect() {
             // Once a connection has been made, make a subscription and send a message.
             console.log("onConnect");
             client.subscribe(Topic);
+            Connected=true;
         }
 
         // called when the client loses its connection
@@ -95,6 +139,7 @@
             if (responseObject.errorCode !== 0) {
                 console.log("onConnectionLost:"+responseObject.errorMessage);
             }
+            Connected=false;
         }
 
         // called when a message arrives
