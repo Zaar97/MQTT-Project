@@ -7,10 +7,10 @@
 
 // Update these with values suitable for your network.
 
-const char* ssid = "kel10";
-const char* pswd = "zara";
+const char* ssid = "E.LEE";
+const char* pswd = "14121997";
 
-const char* mqtt_server = "167.172.87.186"; //Broker IP/URL
+const char* mqtt_server = "152.42.194.14"; //Broker IP/URL
 const char* topic = "/kel10/room/temperature";    //Topic
 
 long timeBetweenMessages = 1000 * 20 * 1;
@@ -22,20 +22,15 @@ int value = 0;
 
 int status = WL_IDLE_STATUS;     // the starting Wifi radio's status
 
-
-
-#define DHTPIN 5    // Digital pin connected to the DHT sensor 
+#define DHTPIN 5     // Digital pin connected to the DHT sensor 
 
 // Uncomment the type of sensor in use:
-//#define DHTTYPE    DHT11     // DHT 11
-#define DHTTYPE    DHT22     // DHT 22 (AM2302)
-
-
+#define DHTTYPE    DHT11     // DHT 11
+//#define DHTTYPE    DHT22     // DHT 22 (AM2302)
 
 DHT_Unified dht(DHTPIN, DHTTYPE);
 
 uint32_t delayMS;
-
 
 void setup_wifi() {
   delay(10);
@@ -103,7 +98,7 @@ void reconnect() {
     clientId += String(micros() & 0xff, 16); // to randomise. sort of
 
     // Attempt to connect
-    if (client.connect(clientId.c_str())) {
+    if (client.connect(clientId.c_str(),username,password)) {
       Serial.println("connected");
       String subscription;
       subscription += topic;
@@ -202,7 +197,7 @@ void loop() {
   client.loop();
 
   String payload = "{\"Temp\":";
-  payload += temp;
+  payload += temp * 12;
   payload += ",\"Hum\":";
   payload += hum;
   payload += "}";
